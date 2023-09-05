@@ -8,15 +8,23 @@ const modalMessage = document.getElementById("modal-message");
 const modal = document.querySelector("#modal");
 const glyph = document.querySelectorAll("span.like-glyph");
 glyph.forEach((el, index) => {
-  el.addEventListener("click", () => {
+  el.addEventListener("click", (e) => {
+    e.preventDefault();
     setTimeout(() => {
       modal.classList.add("hidden");
     }, 3000);
     mimicServerCall()
       .then((response) => {
-        glyph[index].innerHTML = FULL_HEART;
-        glyph[index].classList.add("activated-heart");
-        console.log(response);
+        if (glyph[index].innerHTML === EMPTY_HEART) {
+          console.log(glyph[index].innerHTML);
+          glyph[index].textContent = FULL_HEART;
+          glyph[index].classList.add("activated-heart");
+        } else {
+          console.log(glyph[index].innerHTML, false);
+
+          glyph[index].textContent = EMPTY_HEART;
+          glyph[index].classList.remove("activated-heart");
+        }
       })
       .catch((error) => {
         modalMessage.textContent = error;
